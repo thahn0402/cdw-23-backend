@@ -2,7 +2,6 @@ package nlu.cdw23backend.controller;
 
 import nlu.cdw23backend.entity.OrderInput;
 import nlu.cdw23backend.service.OrderDetailService;
-import nlu.cdw23backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;

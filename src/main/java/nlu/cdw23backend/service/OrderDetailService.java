@@ -5,6 +5,7 @@ import nlu.cdw23backend.dao.OrderDetailDao;
 import nlu.cdw23backend.dao.ProductDao;
 import nlu.cdw23backend.dao.UserDao;
 import nlu.cdw23backend.entity.*;
+import nlu.cdw23backend.service.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
