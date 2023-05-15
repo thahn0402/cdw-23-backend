@@ -1,11 +1,11 @@
 package nlu.cdw23backend.service;
 
 import nlu.cdw23backend.configuration.JwtRequestFilter;
+import nlu.cdw23backend.dao.CartDao;
 import nlu.cdw23backend.dao.OrderDetailDao;
 import nlu.cdw23backend.dao.ProductDao;
 import nlu.cdw23backend.dao.UserDao;
 import nlu.cdw23backend.entity.*;
-import nlu.cdw23backend.service.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,10 @@ public class OrderDetailService {
     @Autowired
     private UserDao userDao;
 
-    public void placeOrder(OrderInput orderInput) {
+    @Autowired
+    private CartDao cartDao;
+
+    public void placeOrder(OrderInput orderInput, boolean isSingleProductCheckout) {
         List<OrderProductQuantity> productQuantityList = orderInput.getOrderProductQuantityList();
 
         for (OrderProductQuantity o : productQuantityList) {
@@ -45,6 +48,12 @@ public class OrderDetailService {
                     user
 
             );
+
+            // lam rong gio hang
+            if (!isSingleProductCheckout) {
+                List<Cart> carts = cartDao.findByUser(user);
+                carts.stream().forEach(x -> cartDao.deleteById(x.getCartId()));
+            }
 
             orderDetailDao.save(orderDetail);
         }

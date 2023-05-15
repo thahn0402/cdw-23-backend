@@ -1,7 +1,12 @@
 package nlu.cdw23backend.service;
 
+import nlu.cdw23backend.configuration.JwtRequestFilter;
+import nlu.cdw23backend.dao.CartDao;
 import nlu.cdw23backend.dao.ProductDao;
+import nlu.cdw23backend.dao.UserDao;
+import nlu.cdw23backend.entity.Cart;
 import nlu.cdw23backend.entity.Product;
+import nlu.cdw23backend.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -9,12 +14,19 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
 
     @Autowired
     private ProductDao productDao;
+
+    @Autowired
+    private UserDao userDao;
+
+    @Autowired
+    private CartDao cartDao;
 
     public Product addNewProduct(Product product) {
         return productDao.save(product);
@@ -42,15 +54,19 @@ public class ProductService {
     }
 
     public List<Product> getProductDetails(boolean isSingleProductCheckout, Integer productId) {
-        if (isSingleProductCheckout) {
-            //going to buy a single product
+        if (isSingleProductCheckout && productId != 0) {
+            //mua mot san pham
             List<Product> list = new ArrayList<>();
             Product product = productDao.findById(productId).get();
             list.add(product);
             return list;
         } else {
-            //going to checkout entire cart
+            //checkout gio hang
+            String currentUser = JwtRequestFilter.CURRENT_USER;
+            User user = userDao.findById(currentUser).get();
+            List<Cart> carts = cartDao.findByUser(user);
+
+            return carts.stream().map(x -> x.getProduct()).collect(Collectors.toList());
         }
-        return new ArrayList<>();
     }
 }
