@@ -67,12 +67,29 @@ public class OrderDetailService {
         return orderDetailDao.findByUser(user);
     }
 
-    public List<OrderDetail> getAllOrderDetails() {
+    public List<OrderDetail> getAllOrderDetails(String status) {
         List<OrderDetail> orderDetails = new ArrayList<>();
-        orderDetailDao.findAll().forEach(
-                x -> orderDetails.add(x)
-        );
+
+        if (status.equals("Tất cả")) {
+            orderDetailDao.findAll().forEach(
+                    x -> orderDetails.add(x)
+            );
+        } else {
+            orderDetailDao.findByOrderStatus(status).forEach(
+                    x -> orderDetails.add(x)
+            );
+        }
+
 
         return orderDetails;
+    }
+
+    public void markOrderAsDelivered(Integer orderId) {
+        OrderDetail orderDetail = orderDetailDao.findById(orderId).get();
+
+        if (orderDetail != null) {
+            orderDetail.setOrderStatus("Đã giao hàng");
+            orderDetailDao.save(orderDetail);
+        }
     }
 }
