@@ -20,6 +20,8 @@ public class OrderDetail {
     @OneToOne
     private User user;
 
+    public OrderDetail(){}
+
     public OrderDetail(String orderFullName, String orderFullOrder, String orderContactNumber, String orderAlternateContactNumber, String orderStatus, Double orderAmount, Product product, User user) {
         this.orderFullName = orderFullName;
         this.orderFullOrder = orderFullOrder;
@@ -77,5 +79,29 @@ public class OrderDetail {
 
     public void setOrderAmount(Double orderAmount) {
         this.orderAmount = orderAmount;
+    }
+
+    public String getOrderContactNumber() {
+        return orderContactNumber;
+    }
+
+    public void setOrderContactNumber(String orderContactNumber) {
+        this.orderContactNumber = orderContactNumber;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

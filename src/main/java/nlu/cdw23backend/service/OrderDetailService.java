@@ -9,12 +9,13 @@ import nlu.cdw23backend.entity.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class OrderDetailService {
 
-    private static final String ORDER_PLACE = "Placed";
+    private static final String ORDER_PLACE = "Đã đặt hàng";
 
     @Autowired
     private OrderDetailDao orderDetailDao;
@@ -57,5 +58,21 @@ public class OrderDetailService {
 
             orderDetailDao.save(orderDetail);
         }
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        String currentUser = JwtRequestFilter.CURRENT_USER;
+        User user = userDao.findById(currentUser).get();
+
+        return orderDetailDao.findByUser(user);
+    }
+
+    public List<OrderDetail> getAllOrderDetails() {
+        List<OrderDetail> orderDetails = new ArrayList<>();
+        orderDetailDao.findAll().forEach(
+                x -> orderDetails.add(x)
+        );
+
+        return orderDetails;
     }
 }

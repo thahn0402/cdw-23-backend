@@ -49,6 +49,10 @@ public class CartService {
         return null;
     }
 
+    public void deleteCartItem(Integer cartId){
+        cartDao.deleteById(cartId);
+    }
+
     public List<Cart> getCartDetails() {
         String currentUser = JwtRequestFilter.CURRENT_USER;
         User user = userDao.findById(currentUser).get();
